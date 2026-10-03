@@ -148,7 +148,7 @@ def main():
         results[name]["chosen"] = name == best_name
 
     MODEL_DIR.mkdir(exist_ok=True)
-    joblib.dump(models[best_name], MODEL_PATH, compress=3)
+    joblib.dump(models[best_name], MODEL_PATH, compress=3) # Save the best model to disk
     card = build_model_card(best_name, results, df, X_train)
     CARD_PATH.write_text(json.dumps(card, indent=2) + "\n")
 
