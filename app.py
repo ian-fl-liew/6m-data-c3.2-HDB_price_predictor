@@ -21,13 +21,14 @@ st.set_page_config(page_title="HDB Resale Price Predictor", page_icon="🏡")
 
 
 # Cache so the model loads once, not on every click.
+# mtime is part of the cache key, so a retrained model is picked up automatically.
 @st.cache_resource
-def load_model():
+def load_model(mtime):
     return joblib.load(MODEL_PATH)
 
 
 @st.cache_data
-def load_card():
+def load_card(mtime):
     return json.loads(CARD_PATH.read_text())
 
 
@@ -38,8 +39,8 @@ if not MODEL_PATH.exists() or not CARD_PATH.exists():
 # model = load_model()
 # card = load_card()
 # ranges = card["numeric_ranges"]
-model = load_model()
-card = load_card()
+model = load_model(MODEL_PATH.stat().st_mtime)
+card = load_card(CARD_PATH.stat().st_mtime)
 
 # A model trained with old features would crash or give wrong answers
 if card["features"] != FEATURES:
