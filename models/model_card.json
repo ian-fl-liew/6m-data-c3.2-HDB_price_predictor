@@ -3,34 +3,114 @@
   "selection_rule": "lowest 5-fold cross-validated RMSE on the training set",
   "results": {
     "Linear Regression": {
-      "cv_rmse": 60245.24550331335,
-      "cv_mae": 46370.52474532942,
-      "cv_r2": 0.8464896733960426,
-      "test_rmse": 60520.8004310368,
-      "test_mae": 46725.92370654723,
-      "test_r2": 0.8477098521914241,
-      "fit_seconds": 0.3,
+      "cv_rmse": 78239.01263451057,
+      "cv_mae": 58500.46156550486,
+      "cv_r2": 0.8587788546280312,
+      "test_rmse": 77499.71879501149,
+      "test_mae": 57769.22415387603,
+      "test_r2": 0.8624164210161936,
+      "fit_seconds": 0.24,
+      "n_trees": null,
+      "chosen": false
+    },
+    "Linear Regression (log price)": {
+      "cv_rmse": 69078.41924387193,
+      "cv_mae": 50070.40775801435,
+      "cv_r2": 0.8899009964686055,
+      "test_rmse": 68568.81757221086,
+      "test_mae": 49480.4806999939,
+      "test_r2": 0.892299016292574,
+      "fit_seconds": 0.18,
+      "n_trees": null,
       "chosen": false
     },
     "Random Forest": {
-      "cv_rmse": 36662.21271935085,
-      "cv_mae": 25629.299854557023,
-      "cv_r2": 0.9431213091942381,
-      "test_rmse": 35623.37478794135,
-      "test_mae": 25096.538313861063,
-      "test_r2": 0.9472366208112629,
-      "fit_seconds": 5.17,
+      "cv_rmse": 46600.762537067516,
+      "cv_mae": 31166.18105278985,
+      "cv_r2": 0.9498959834149382,
+      "test_rmse": 45932.60435030673,
+      "test_mae": 30615.778978136404,
+      "test_r2": 0.9516709242254076,
+      "fit_seconds": 8.28,
+      "n_trees": null,
+      "chosen": false
+    },
+    "Random Forest (log price)": {
+      "cv_rmse": 47102.58946449147,
+      "cv_mae": 31264.67865275211,
+      "cv_r2": 0.9488127524096719,
+      "test_rmse": 45779.32733184933,
+      "test_mae": 30560.578751634992,
+      "test_r2": 0.9519929341328441,
+      "fit_seconds": 8.11,
+      "n_trees": null,
       "chosen": false
     },
     "Gradient Boosting": {
-      "cv_rmse": 36120.588253774724,
-      "cv_mae": 26338.255634321926,
-      "cv_r2": 0.9448056274434666,
-      "test_rmse": 35813.679333219334,
-      "test_mae": 26191.542214473622,
-      "test_r2": 0.9466713778278606,
-      "fit_seconds": 23.2,
+      "cv_rmse": 43748.99297275698,
+      "cv_mae": 30260.069555010752,
+      "cv_r2": 0.9558411776621176,
+      "test_rmse": 43394.55377051042,
+      "test_mae": 29654.072176855356,
+      "test_r2": 0.956864304683531,
+      "fit_seconds": 105.41,
+      "n_trees": 1229,
       "chosen": true
+    },
+    "Gradient Boosting (log price)": {
+      "cv_rmse": 49303.68364738235,
+      "cv_mae": 33998.61904899489,
+      "cv_r2": 0.9439103876666971,
+      "test_rmse": 48978.015739345734,
+      "test_mae": 33633.22674724642,
+      "test_r2": 0.9450498702601233,
+      "fit_seconds": 23.94,
+      "n_trees": 257,
+      "chosen": false
+    },
+    "Hist Gradient Boosting": {
+      "cv_rmse": 44799.712629425274,
+      "cv_mae": 31105.832488540596,
+      "cv_r2": 0.9536942904403608,
+      "test_rmse": 43714.462015811885,
+      "test_mae": 30150.97782902612,
+      "test_r2": 0.9562259605231141,
+      "fit_seconds": 3.72,
+      "n_trees": 864,
+      "chosen": false
+    },
+    "Hist Gradient Boosting (log price)": {
+      "cv_rmse": 44750.22853509111,
+      "cv_mae": 30820.75461339736,
+      "cv_r2": 0.9537904963767305,
+      "test_rmse": 43665.634648055915,
+      "test_mae": 30084.043252283638,
+      "test_r2": 0.9563236937374624,
+      "fit_seconds": 3.0,
+      "n_trees": 598,
+      "chosen": false
+    },
+    "Hist GB (native categories)": {
+      "cv_rmse": 43964.64680734102,
+      "cv_mae": 30616.483066711942,
+      "cv_r2": 0.955397187615362,
+      "test_rmse": 43403.18494152897,
+      "test_mae": 30211.5947950036,
+      "test_r2": 0.9568471436088206,
+      "fit_seconds": 1.11,
+      "n_trees": 349,
+      "chosen": false
+    },
+    "Hist GB (native categories) (log price)": {
+      "cv_rmse": 43914.493397513026,
+      "cv_mae": 30259.872075047264,
+      "cv_r2": 0.9554939879839985,
+      "test_rmse": 42765.14062348634,
+      "test_mae": 29395.039690047757,
+      "test_r2": 0.9581065469714096,
+      "fit_seconds": 1.78,
+      "n_trees": 585,
+      "chosen": false
     }
   },
   "features": [
@@ -38,7 +118,8 @@
     "flat_type",
     "floor_area_sqm",
     "storey",
-    "lease_commence_date"
+    "remaining_lease",
+    "months_since_2017"
   ],
   "categories": {
     "town": [
@@ -82,24 +163,29 @@
   "numeric_ranges": {
     "floor_area_sqm": {
       "min": 31.0,
-      "max": 249.0,
-      "median": 96.0
+      "max": 195.0,
+      "median": 93.0
     },
     "storey": {
       "min": 2.0,
       "max": 50.0,
       "median": 8.0
     },
-    "lease_commence_date": {
-      "min": 1966.0,
-      "max": 2016.0,
-      "median": 1993.0
+    "remaining_lease": {
+      "min": 39.416666666666664,
+      "max": 95.33333333333333,
+      "median": 71.58333333333333
+    },
+    "months_since_2017": {
+      "min": 94.0,
+      "max": 117.0,
+      "median": 105.0
     }
   },
   "data": {
-    "rows": 50432,
-    "first_month": "2017-01",
-    "last_month": "2019-05"
+    "rows": 48979,
+    "first_month": "2024-11",
+    "last_month": "2026-10"
   },
   "sklearn_version": "1.9.1"
 }

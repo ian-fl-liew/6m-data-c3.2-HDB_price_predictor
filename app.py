@@ -35,9 +35,18 @@ if not MODEL_PATH.exists() or not CARD_PATH.exists():
     st.error("No trained model found. Run `python model.py` first, then reload this page.")
     st.stop()
 
+# model = load_model()
+# card = load_card()
+# ranges = card["numeric_ranges"]
 model = load_model()
 card = load_card()
+
+# A model trained with old features would crash or give wrong answers
+if card["features"] != FEATURES:
+    st.error("The saved model uses different features from the app. Run `python model.py` again.")
+    st.stop()
 ranges = card["numeric_ranges"]
+
 best = card["best_model"]
 best_results = card["results"][best]
 
@@ -60,7 +69,15 @@ with predict_tab:
                 card["categories"]["flat_type"],
                 index=card["categories"]["flat_type"].index("4 ROOM"),
             )
-            storey = st.slider("Storey (floor level)", min_value=1, max_value=51, value=8)
+            # storey = st.slider("Storey (floor level)", min_value=1, max_value=51, value=8)
+            storey = st.slider(
+                "Storey (floor level)",
+                min_value=int(ranges["storey"]["min"]),
+                max_value=int(ranges["storey"]["max"]),
+                value=int(ranges["storey"]["median"]),
+            )
+
+
         with col2:
             floor_area = st.slider(
                 "Floor area (sqm)",
@@ -68,19 +85,36 @@ with predict_tab:
                 max_value=int(ranges["floor_area_sqm"]["max"]),
                 value=int(ranges["floor_area_sqm"]["median"]),
             )
-            lease_year = st.slider(
-                "Lease commencement year",
-                min_value=int(ranges["lease_commence_date"]["min"]),
-                max_value=int(ranges["lease_commence_date"]["max"]),
-                value=int(ranges["lease_commence_date"]["median"]),
+            # lease_year = st.slider(
+            #     "Lease commencement year",
+            #     min_value=int(ranges["lease_commence_date"]["min"]),
+            #     max_value=int(ranges["lease_commence_date"]["max"]),
+            #     value=int(ranges["lease_commence_date"]["median"]),
+            # )
+            remaining_lease = st.slider(
+                "Remaining lease (years)",
+                min_value=int(ranges["remaining_lease"]["min"]),
+                max_value=int(ranges["remaining_lease"]["max"]),
+                value=int(ranges["remaining_lease"]["median"]),
             )
+
         submitted = st.form_submit_button("Predict resale price", type="primary")
 
     if submitted:
+        # month_index = (int(card["data"]["last_month"][:4]) - 2017) * 12 + int(card["data"]["last_month"][5:]) - 1
+
+        # # Column names and order must match the training data exactly.
+        # flat = pd.DataFrame(
+        #     [[town, flat_type, floor_area, storey, remaining_lease, month_index]], columns=FEATURES
+        # )
+        # Price the flat at the latest month the model has seen, e.g. "2026-10" -> 117
+        last_month = card["data"]["last_month"]
+        month_index = (int(last_month[:4]) - 2017) * 12 + int(last_month[5:]) - 1
         # Column names and order must match the training data exactly.
         flat = pd.DataFrame(
-            [[town, flat_type, floor_area, storey, lease_year]], columns=FEATURES
+            [[town, flat_type, floor_area, storey, remaining_lease, month_index]], columns=FEATURES
         )
+
         price = model.predict(flat)[0]
         typical_error = best_results["test_mae"]
 
@@ -90,14 +124,19 @@ with predict_tab:
             f"on average (MAE), so a realistic range is roughly "
             f"S${price - typical_error:,.0f} to S${price + typical_error:,.0f}."
         )
+        # st.info(
+        #     f"Prices reflect the {card['data']['first_month']} to "
+        #     f"{card['data']['last_month']} market, not today's prices."
+        # )
         st.info(
-            f"Prices reflect the {card['data']['first_month']} to "
-            f"{card['data']['last_month']} market, not today's prices."
+            f"Estimated at {last_month} prices, the latest month in the "
+            f"training data. Retrain monthly to keep this current."
         )
 
 with compare_tab:
     st.write(
-        "Three models were trained on the same data. The deployed model was "
+        # "Three models were trained on the same data. The deployed model was "
+        f"{len(card['results'])} models were trained on the same data. The deployed model was "
         f"chosen by **{card['selection_rule']}**."
     )
     table = pd.DataFrame.from_dict(card["results"], orient="index").rename(
@@ -108,7 +147,10 @@ with compare_tab:
             "test_rmse": "Test RMSE (S$)",
             "test_mae": "Test MAE (S$)",
             "test_r2": "Test R²",
+            # "fit_seconds": "Train time (s)",
+            # "chosen": "Deployed",
             "fit_seconds": "Train time (s)",
+            "n_trees": "Trees used",
             "chosen": "Deployed",
         }
     )
@@ -121,7 +163,9 @@ with compare_tab:
                 "Test RMSE (S$)": "{:,.0f}",
                 "Test MAE (S$)": "{:,.0f}",
                 "Test R²": "{:.3f}",
+                # "Train time (s)": "{:.1f}",
                 "Train time (s)": "{:.1f}",
+                "Trees used": "{:,.0f}",                
             }
         )
     )
