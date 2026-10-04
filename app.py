@@ -71,7 +71,7 @@ with predict_tab:
                 index=card["categories"]["flat_type"].index("4 ROOM"),
             )
             # storey = st.slider("Storey (floor level)", min_value=1, max_value=51, value=8)
-            storey = st.slider(
+            storey = st.number_input(
                 "Storey (floor level)",
                 min_value=int(ranges["storey"]["min"]),
                 max_value=int(ranges["storey"]["max"]),
@@ -80,7 +80,7 @@ with predict_tab:
 
 
         with col2:
-            floor_area = st.slider(
+            floor_area = st.number_input(
                 "Floor area (sqm)",
                 min_value=int(ranges["floor_area_sqm"]["min"]),
                 max_value=int(ranges["floor_area_sqm"]["max"]),
@@ -92,7 +92,7 @@ with predict_tab:
             #     max_value=int(ranges["lease_commence_date"]["max"]),
             #     value=int(ranges["lease_commence_date"]["median"]),
             # )
-            remaining_lease = st.slider(
+            remaining_lease = st.number_input(
                 "Remaining lease (years)",
                 min_value=int(ranges["remaining_lease"]["min"]),
                 max_value=int(ranges["remaining_lease"]["max"]),
