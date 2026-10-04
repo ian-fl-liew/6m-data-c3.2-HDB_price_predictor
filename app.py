@@ -119,12 +119,13 @@ with predict_tab:
         price = model.predict(flat)[0]
         typical_error = best_results["test_mae"]
 
-        st.success(f"Estimated resale price: **S${price:,.0f}**")
+        st.success(f"Estimated resale price: **S\\${price:,.0f}**")
         st.caption(
-            f"On unseen test data this model was off by about S${typical_error:,.0f} "
+            f"On unseen test data this model was off by about S\\${typical_error:,.0f} "
             f"on average (MAE), so a realistic range is roughly "
-            f"S${price - typical_error:,.0f} to S${price + typical_error:,.0f}."
+            f"S\\${price - typical_error:,.0f} to S\\${price + typical_error:,.0f}."
         )
+
         # st.info(
         #     f"Prices reflect the {card['data']['first_month']} to "
         #     f"{card['data']['last_month']} market, not today's prices."
